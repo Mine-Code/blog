@@ -10,10 +10,10 @@ if [ ! -f "${ENV_FILE}" ]; then
     exit 1
 fi
 
-echo "starting Docker compose..."
+echo "starting docker compose..."
 
 docker compose down
 docker compose build
 docker compose up -d
 
-echo "Docker composed successfully"
+echo "docker composed successfully"
