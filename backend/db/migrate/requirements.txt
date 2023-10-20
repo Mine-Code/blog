@@ -1,0 +1,6 @@
+sqlalchemy==1.4.46 
+sqlalchemy-migrate 
+pymysql 
+PyMySQL 
+mysqlclient==2.1.0 
+cryptography

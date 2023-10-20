@@ -26,6 +26,21 @@ services:
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    
+  migrate:
+    image: python:3.10
+    build:
+      context: ./backend/db/migrate
+    volumes:
+      - ./backend/db/migrate:/app
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    depends_on:
+      database:
+        condition: service_healthy
 
   backend:
     image: python:3.10-slim
@@ -42,6 +57,8 @@ services:
     depends_on:
       database:
         condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
 
 volumes:
   dbdata:
