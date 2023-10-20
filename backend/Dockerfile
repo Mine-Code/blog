@@ -2,7 +2,7 @@ FROM python:3.10-slim AS dev
 
 WORKDIR /app
 COPY . .
-RUN pip install --no-cache-dir fastapi uvicorn
+RUN pip install --no-cache-dir -r requirements.txt
 
 EXPOSE 8000
 
