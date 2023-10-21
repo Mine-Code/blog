@@ -3,9 +3,9 @@ import datetime
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.sql.sqltypes import DateTime
 
-from db.base_class import Base
+from backend.app.model.base_model import Base
 
-class Post(Base):
+class Posts(Base):
   __tablename__ = 'posts'
 
   id = Column(Integer, primary_key=True)
