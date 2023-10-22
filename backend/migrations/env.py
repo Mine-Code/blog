@@ -18,9 +18,9 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-from db.db import MYSQL_URL
-from db import base
-target_metadata = base.Base.metadata
+from app.core.config import configs
+from app.model.base_model import Base
+target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
@@ -42,7 +42,7 @@ def run_migrations_offline() -> None:
     """
     # url = config.get_main_option("sqlalchemy.url")
     context.configure(
-        url=MYSQL_URL,
+        url=configs.DATABASE_URI,
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
@@ -61,7 +61,7 @@ def run_migrations_online() -> None:
 
     """
     conf = config.get_section(config.config_ini_section)
-    conf["sqlalchemy.url"] = MYSQL_URL
+    conf["sqlalchemy.url"] = configs.DATABASE_URI
 
     connectable = engine_from_config(
         conf,

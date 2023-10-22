@@ -1,6 +1,7 @@
-fastapi
-uvicorn
-sqlalchemy
-alembic
-pymysql
-cryptography
+fastapi==0.93.0
+SQLAlchemy==1.4.36
+alembic==1.7.7
+PyMySQL==1.0.2
+cryptography==37.0.2
+dependency-injector==4.39.1
+python-jose==3.3.0

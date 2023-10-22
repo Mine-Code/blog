@@ -17,15 +17,17 @@ services:
       - ./etc/mysql/conf.d:/etc/mysql/conf.d
       - ./etc/mysql/dbdata:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost", "-u", "root", "-p${DB_ROOT_PASSWORD}"]
       interval: 5s
       timeout: 5s
       retries: 5
     environment:
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-      - MYSQL_DATABASE=${MYSQL_DATABASE}
-      - MYSQL_USER=${MYSQL_USER}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - DB=${DB}
+      - DB_HOST=${DB_HOST}
+      - DB_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
 
   backend:
     image: python:3.10-slim
@@ -35,10 +37,12 @@ services:
     volumes:
       - ./backend:/app
     environment:
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-      - MYSQL_DATABASE=${MYSQL_DATABASE}
-      - MYSQL_USER=${MYSQL_USER}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - DB=${DB}
+      - DB_HOST=${DB_HOST}
+      - DB_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
     depends_on:
       database:
         condition: service_healthy

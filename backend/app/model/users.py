@@ -2,9 +2,9 @@ import datetime
 
 from sqlalchemy.sql.sqltypes import DateTime
 from sqlalchemy import Column, Integer, String
-from db.base_class import Base
+from app.model.base_model import Base
 
-class User(Base):
+class Users(Base):
   __tablename__ = 'users'
 
   id = Column(Integer, primary_key=True)
