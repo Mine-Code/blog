@@ -1,4 +1,4 @@
 from pydantic import BaseModel
 
-class BaseUser(BaseModel):
+class TestResponse(BaseModel):
   message: str

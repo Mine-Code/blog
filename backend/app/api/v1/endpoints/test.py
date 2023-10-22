@@ -1,13 +1,12 @@
 from fastapi import APIRouter, Depends
 
+from app.schema.test_schema import TestResponse
+
 router = APIRouter(
   prefix="/test",
   tags=["test"],
 )
 
-@router.get("")
+@router.get("", response_model=TestResponse)
 async def test():
-  response = {
-      "message": "hello world"
-  }
-  return response
+  return {"message": "test"}

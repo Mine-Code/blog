@@ -12,9 +12,9 @@ class AppCreator:
   def __init__(self):
     # set app default
     self.app = FastAPI(
-        title=configs.PROJECT_NAME,
-        openapi_url=f"{configs.API}/openapi.json",
-        version="0.0.1",
+      title=configs.PROJECT_NAME,
+      openapi_url=f"{configs.API}/openapi.json",
+      version="0.0.1",
     )
 
     # set db and container
