@@ -20,3 +20,17 @@ class BaseUser(BaseModel):
 
 class User(ModelBaseInfo, BaseUser, metaclass=AllOptional):
   ...
+
+
+class FindUser(FindBase, BaseUser, metaclass=AllOptional):
+  identity_type__eq: str
+  identifier: str
+  ...
+
+
+class UpsertUser(BaseUser, metaclass=AllOptional):
+  ...
+
+class FindUserResult(BaseModel):
+  founds: Optional[List[User]]
+  search_options: Optional[SearchOptions]
