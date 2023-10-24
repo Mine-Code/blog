@@ -27,10 +27,10 @@ def get_current_user(
     return current_user
 
 
-# def get_current_active_user(current_user: User = Depends(get_current_user)) -> User:
-#   if not current_user.is_active:
-#     raise AuthError("Inactive user")
-#   return current_user
+def get_current_active_user(current_user: User = Depends(get_current_user)) -> User:
+  if not current_user.is_active:
+    raise AuthError("Inactive user")
+  return current_user
 
 
 def get_current_user_with_no_exception(
@@ -48,9 +48,9 @@ def get_current_user_with_no_exception(
   return current_user
 
 
-# def get_current_super_user(current_user: User = Depends(get_current_user)) -> User:
-#   if not current_user.is_active:
-#     raise AuthError("Inactive user")
-#   if not current_user.is_superuser:
-#     raise AuthError("It's not a super user")
-#   return current_user
+def get_current_super_user(current_user: User = Depends(get_current_user)) -> User:
+  if not current_user.is_active:
+    raise AuthError("Inactive user")
+  if not current_user.is_superuser:
+    raise AuthError("It's not a super user")
+  return current_user

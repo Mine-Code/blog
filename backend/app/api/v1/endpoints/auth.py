@@ -2,7 +2,7 @@ from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends
 
 from app.core.container import Container
-# from app.core.dependencies import get_current_active_user
+from app.core.dependencies import get_current_active_user
 from app.model.user import User
 from app.schema.auth_schema import SignIn, SignInResponse, SignUp
 from app.schema.user_schema import User as UserSchema
@@ -28,10 +28,13 @@ async def sign_up(user_info: SignUp, service: AuthService = Depends(Provide[Cont
 
 @router.get("/me", response_model=UserSchema)
 @inject
-# async def get_me(current_user: User = Depends(get_current_active_user)):
-async def get_me(current_user: User):
+async def get_me(current_user: User = Depends(get_current_active_user)):
   user = UserSchema()
   user.username = current_user.username
-  user.user_token = current_user.user_token
+  user.uuid = current_user.uuid
   user.created_at = current_user.created_at
+  user.updated_at = current_user.updated_at
+  user.is_active = current_user.is_active
+  user.is_superuser = current_user.is_superuser
+  user.id = current_user.id
   return user

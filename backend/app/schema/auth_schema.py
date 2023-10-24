@@ -20,10 +20,9 @@ class SignUp(BaseModel):
 
 class Payload(BaseModel):
   id: int
-  identity_type: str
-  identifier: str
+  uuid: str
   username: str
-  # is_superuser: bool
+  is_superuser: bool
 
 
 class SignInResponse(BaseModel):

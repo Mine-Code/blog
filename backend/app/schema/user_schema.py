@@ -7,9 +7,19 @@ from app.util.schema import AllOptional
 
 class BaseUser(BaseModel):
   username: str
+  uuid: str
+  is_active: bool
+  is_superuser: bool
 
   class Config:
     orm_mode = True
+    schema_extra = {
+      "example": {
+        "username": "new-username",
+        "is_active": True,
+        "is_superuser": False,
+      }
+    }
   
 
 # class BaseUserWithAuths(BaseUser):

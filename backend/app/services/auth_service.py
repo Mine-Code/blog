@@ -21,10 +21,10 @@ class AuthService(BaseService):
     super().__init__(user_repository)
 
   def sign_in(self, sign_in_info: SignIn):
-    find_user = FindUserAuth()
-    find_user.identity_type__eq = sign_in_info.identity_type__eq
-    find_user.identifier__eq = sign_in_info.identifier__eq
-    user_auths: List[UserAuth] = self.user_auth_repository.read_by_options(find_user)["founds"]
+    find_user_auth = FindUserAuth()
+    find_user_auth.identity_type__eq = sign_in_info.identity_type__eq
+    find_user_auth.identifier__eq = sign_in_info.identifier__eq
+    user_auths: List[UserAuth] = self.user_auth_repository.read_by_options(find_user_auth)["founds"]
     
     if len(user_auths) < 1:
       raise AuthError(detail="Incorrect identity type or identifier")
@@ -34,24 +34,18 @@ class AuthService(BaseService):
     #   raise AuthError(detail="Account is not active")
 
     if found_user_auth.identity_type == "email":
-      if not verify_credential(sign_in_info.password, found_user_auth.password):
+      if not verify_credential(sign_in_info.credential, found_user_auth.credential):
         raise AuthError(detail="Incorrect email or password")
     
       # delattr(found_user_auth, "password")
 
-      matched_users: List[User] = self.user_repository.read_by_id(found_user_auth.user_id)["founds"]
+      found_user: User = self.user_repository.read_by_id(found_user_auth.user_id)
       
-      if len(matched_users) < 1:
-        raise AuthError(detail="User not found")
-      
-      found_user = matched_users[0]
-
       payload = Payload(
         id=found_user.id,
-        identity_type=found_user_auth.identity_type,
-        identifier=found_user_auth.identifier,
+        uuid=found_user.uuid,
         username=found_user.username,
-        # is_superuser=found_user_auth.is_superuser,
+        is_superuser=found_user.is_superuser,
       )
 
       token_lifespan = timedelta(minutes=configs.ACCESS_TOKEN_EXPIRE_MINUTES)
@@ -59,7 +53,7 @@ class AuthService(BaseService):
       sign_in_result = {
         "access_token": access_token,
         "expiration": expiration_datetime,
-        "user_info": found_user_auth,
+        "user_info": found_user,
       }
       return sign_in_result
     
@@ -71,22 +65,20 @@ class AuthService(BaseService):
 
   def sign_up(self, user_info: SignUp):
     if user_info.identity_type == "email":
-      user_token = get_rand_hash()
-      # user = User(**user_info.dict(exclude_none=True), is_active=True, is_superuser=False, user_token=user_token)
-      user = User(**user_info.dict(exclude_none=True), user_token=user_token)
+      uuid = get_rand_hash()
       
-      hashed_credential = get_credential_hash(user_info.raw_credential)
+      # user = User(**user_info.dict(exclude_none=True), is_active=True, is_superuser=False, uuid=uuid)
+      user = User(**user_info.dict(exclude_none=True), uuid=uuid)
+      created_user = self.user_repository.create(user)
+      
+      credential = get_credential_hash(user_info.raw_credential)
       user_auth = UserAuth(
         **user_info.dict(exclude_none=True),
-        identity_type="email",
-        identifier=user_info.identifier,
-        credential=hashed_credential
+        user_id=created_user.id,
+        credential=credential
       )
-
-      delattr(user_auth, "raw_credential")
       
       created_user_auth = self.user_auth_repository.create(user_auth)
-      created_user = self.user_repository.create(user)
 
       return created_user
     
