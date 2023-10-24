@@ -1,1 +1,2 @@
 from app.repository.user_repository import UserRepository
+from app.repository.user_auth_repository import UserAuthRepository
