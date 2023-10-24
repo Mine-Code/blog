@@ -17,4 +17,4 @@ class Container(containers.DeclarativeContainer):
   db = providers.Singleton(Database, db_url=configs.DATABASE_URI)
 
   user_repository = providers.Factory(UserRepository, session_factory=db.provided.session)
-  user_service = providers.Factory(UserService, repository=user_repository)  
+  user_service = providers.Factory(UserService, user_repository=user_repository)  
