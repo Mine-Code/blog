@@ -14,6 +14,7 @@ class SignIn(BaseModel):
 class SignUp(BaseModel):
   identity_type: str
   identifier: str
+  raw_credential: str
   username: str
 
 

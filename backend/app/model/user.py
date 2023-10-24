@@ -7,3 +7,4 @@ class User(BaseSQLModel, table=True):
   __tablename__ = "users"
 
   username: str = Field(max_length=40, nullable=False, unique=True)
+  user_token: str = Field(max_length=255, unique=True)

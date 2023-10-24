@@ -22,9 +22,9 @@ class User(ModelBaseInfo, BaseUser, metaclass=AllOptional):
   ...
 
 
-class FindUser(FindBase, BaseUser, metaclass=AllOptional):
+class FindUserAuth(FindBase, BaseUser, metaclass=AllOptional):
   identity_type__eq: str
-  identifier: str
+  identifier__eq: str
   ...
 
 
