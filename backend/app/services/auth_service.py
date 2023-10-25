@@ -34,7 +34,7 @@ class AuthService(BaseService):
     #   raise AuthError(detail="Account is not active")
 
     if found_user_auth.identity_type == "email":
-      if not verify_credential(sign_in_info.credential, found_user_auth.credential):
+      if not verify_credential(sign_in_info.raw_credential, found_user_auth.credential):
         raise AuthError(detail="Incorrect email or password")
     
       # delattr(found_user_auth, "password")
