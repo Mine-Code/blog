@@ -13,13 +13,6 @@ class BaseUser(BaseModel):
 
   class Config:
     orm_mode = True
-    schema_extra = {
-      "example": {
-        "username": "new-username",
-        "is_active": True,
-        "is_superuser": False,
-      }
-    }
   
 
 # class BaseUserWithAuths(BaseUser):
@@ -30,6 +23,17 @@ class BaseUser(BaseModel):
 
 class User(ModelBaseInfo, BaseUser, metaclass=AllOptional):
   ...
+  class Config:
+    schema_extra = {
+      "example": {
+        "username": "hoge",
+        "uuid": "1a2b3c4d5e6f7e8d",
+        "is_active": True,
+        "is_superuser": False,
+        "created_at": "2006-01-02T15:04:05.000Z",
+        "updated_at": "2006-01-02T15:04:05.000Z",
+      }
+    }
 
 
 class FindUserAuth(FindBase, BaseUser, metaclass=AllOptional):
