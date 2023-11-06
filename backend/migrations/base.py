@@ -1,5 +1,5 @@
-from backend.app.model.base_model import Base
+from app.model.base_model import BaseSQLModel
 
 # すべてのモデルをimport (alembicにモデル情報を引き渡すために必要)
-from model.posts import Post
-from model.users import User
+from app.model.user import User
+from app.model.user_auth import UserAuth

@@ -22,12 +22,10 @@ services:
       timeout: 5s
       retries: 5
     environment:
-      - DB=${DB}
-      - DB_HOST=${DB_HOST}
-      - DB_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
-      - DB_NAME=${DB_NAME}
-      - DB_USER=${DB_USER}
-      - DB_PASSWORD=${DB_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
 
   backend:
     image: python:3.10-slim
@@ -43,6 +41,7 @@ services:
       - DB_NAME=${DB_NAME}
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
+      - SECRET_KEY=${JWT_SECRET_KEY}
     depends_on:
       database:
         condition: service_healthy

@@ -40,6 +40,7 @@ class Configs(BaseSettings):
   DB_PASSWORD: str = os.getenv("DB_PASSWORD")
   DB_HOST: str = os.getenv("DB_HOST", "database")
   DB_PORT: str = os.getenv("DB_PORT", "3306")
+  DB_NAME: str = os.getenv("DB_NAME", "blog-db")
   DB_ENGINE: str = DB_ENGINE_MAPPER.get(DB)
 
   DATABASE_URI_FORMAT: str = "{db_engine}://{user}:{password}@{host}:{port}/{database}"
@@ -51,7 +52,7 @@ class Configs(BaseSettings):
     host=DB_HOST,
     port=DB_PORT,
     # database=ENV_DATABASE_MAPPER[ENV],
-    database="blog-db"
+    database=DB_NAME,
   )
 
   # find query
