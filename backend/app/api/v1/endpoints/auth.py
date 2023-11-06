@@ -9,21 +9,21 @@ from app.schema.user_schema import User as UserSchema
 from app.services.auth_service import AuthService
 
 router = APIRouter(
-    prefix="/auth",
-    tags=["auth"],
+  prefix="/auth",
+  tags=["auth"],
 )
 
 
 @router.post("/sign-in", response_model=SignInResponse)
 @inject
 async def sign_in(user_info: SignIn, service: AuthService = Depends(Provide[Container.auth_service])):
-    return service.sign_in(user_info)
+  return service.sign_in(user_info)
 
 
 @router.post("/sign-up", response_model=UserSchema)
 @inject
 async def sign_up(user_info: SignUp, service: AuthService = Depends(Provide[Container.auth_service])):
-    return service.sign_up(user_info)
+  return service.sign_up(user_info)
 
 
 @router.get("/me", response_model=UserSchema)
