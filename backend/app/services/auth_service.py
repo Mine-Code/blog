@@ -8,8 +8,8 @@ from app.model.user import User
 from app.model.user_auth import UserAuth
 from app.repository.user_repository import UserRepository
 from app.repository.user_auth_repository import UserAuthRepository
-from app.schema.auth_schema import Payload, SignIn, SignUp
-from app.schema.user_schema import FindUserAuth
+from app.schema.user_schema import User
+from app.schema.auth_schema import AuthsWithUser, Payload, SignIn, SignUp, RawIdentifier, FindAuthByUser, FindAuthByIdentifier
 from app.services.base_service import BaseService
 from app.util.hash import get_rand_hash
 
@@ -21,7 +21,7 @@ class AuthService(BaseService):
     super().__init__(user_repository)
 
   def sign_in(self, sign_in_info: SignIn):
-    find_user_auth = FindUserAuth()
+    find_user_auth = FindAuthByIdentifier()
     find_user_auth.identity_type__eq = sign_in_info.identity_type__eq
     find_user_auth.identifier__eq = sign_in_info.identifier__eq
     user_auths: List[UserAuth] = self.user_auth_repository.read_by_options(find_user_auth)["founds"]
@@ -67,8 +67,7 @@ class AuthService(BaseService):
     if user_info.identity_type == "email":
       uuid = get_rand_hash()
       
-      # user = User(**user_info.dict(exclude_none=True), is_active=True, is_superuser=False, uuid=uuid)
-      user = User(**user_info.dict(exclude_none=True), uuid=uuid)
+      user = User(**user_info.dict(exclude_none=True), is_active=True, is_superuser=False, uuid=uuid)
       created_user = self.user_repository.create(user)
       
       credential = get_credential_hash(user_info.raw_credential)
@@ -84,6 +83,33 @@ class AuthService(BaseService):
     
     elif user_info.identity_type == "github":
       # TODO: implement github sign up
+      pass
+    else:
+      raise AuthError(detail="Incorrect identity type")
+  
+  def register(self, register_info: RawIdentifier, current_user: User):
+    if register_info.identity_type == "email":
+      credential = get_credential_hash(register_info.raw_credential)
+      user_auth = UserAuth(
+        **register_info.dict(exclude_none=True),
+        user_id=current_user.id,
+        credential=credential
+      )
+      created_user_auth = self.user_auth_repository.create(user_auth)
+
+      find_user_auth = FindAuthByUser()
+      find_user_auth.user_id__eq = current_user.id
+      user_auths: List[UserAuth] = self.user_auth_repository.read_by_options(find_user_auth)["founds"]
+
+      auths_with_user = AuthsWithUser(
+        **current_user.dict(exclude_none=True),
+        identifiers=user_auths
+      )
+
+      return auths_with_user
+      
+    elif register_info.identity_type == "github":
+      # TODO: implement github register
       pass
     else:
       raise AuthError(detail="Incorrect identity type")
