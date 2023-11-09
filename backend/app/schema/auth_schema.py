@@ -3,7 +3,6 @@ from datetime import datetime
 from typing import Optional
 
 from pydantic import BaseModel
-
 from app.schema.base_schema import FindBase, ModelBaseInfo, SearchOptions
 from app.schema.user_schema import BaseUser, User
 from app.util.schema import AllOptional
@@ -67,7 +66,7 @@ class SignUp(RawIdentifier):
     }
 
 
-class AuthsWithUser(User):
+class RegisterResponse(User):
   ...
   identifiers: List[Identifier]
   class Config:

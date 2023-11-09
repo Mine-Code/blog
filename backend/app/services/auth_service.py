@@ -9,7 +9,7 @@ from app.model.user_auth import UserAuth
 from app.repository.user_repository import UserRepository
 from app.repository.user_auth_repository import UserAuthRepository
 from app.schema.user_schema import User
-from app.schema.auth_schema import AuthsWithUser, Payload, SignIn, SignUp, RawIdentifier, FindAuthByUser, FindAuthByIdentifier
+from app.schema.auth_schema import RegisterResponse, Payload, SignIn, SignUp, RawIdentifier, FindAuthByUser, FindAuthByIdentifier
 from app.services.base_service import BaseService
 from app.util.hash import get_rand_hash
 
@@ -101,12 +101,12 @@ class AuthService(BaseService):
       find_user_auth.user_id__eq = current_user.id
       user_auths: List[UserAuth] = self.user_auth_repository.read_by_options(find_user_auth)["founds"]
 
-      auths_with_user = AuthsWithUser(
+      response = RegisterResponse(
         **current_user.dict(exclude_none=True),
         identifiers=user_auths
       )
 
-      return auths_with_user
+      return response
       
     elif register_info.identity_type == "github":
       # TODO: implement github register

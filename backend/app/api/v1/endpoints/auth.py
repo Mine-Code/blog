@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends
 from app.core.container import Container
 from app.core.dependencies import get_current_active_user
 from app.model.user import User
-from app.schema.auth_schema import AuthsWithUser, SignIn, SignInResponse, SignUp, RawIdentifier
+from app.schema.auth_schema import RegisterResponse, SignIn, SignInResponse, SignUp, RawIdentifier
 from app.services.auth_service import AuthService
 
 router = APIRouter(
@@ -27,7 +27,7 @@ async def sign_up(
   service: AuthService = Depends(Provide[Container.auth_service])):
   return service.sign_up(user_info)
 
-@router.post("/register", response_model=AuthsWithUser)
+@router.post("/register", response_model=RegisterResponse)
 @inject
 async def register(
   register_info: RawIdentifier,
