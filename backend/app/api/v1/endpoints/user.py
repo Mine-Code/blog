@@ -5,7 +5,8 @@ from app.core.container import Container
 from app.core.dependencies import get_current_super_user
 from app.core.security import JWTBearer
 from app.schema.base_schema import Blank
-from app.schema.user_schema import FindUserAuth, FindUserResult, UpsertUser, User
+from app.schema.user_schema import FindUserResult, UpsertUser, User
+from app.schema.auth_schema import FindAuthByIdentifier
 from app.services.user_service import UserService
 
 router = APIRouter(prefix="/user", tags=["user"], dependencies=[Depends(JWTBearer())])
@@ -14,7 +15,7 @@ router = APIRouter(prefix="/user", tags=["user"], dependencies=[Depends(JWTBeare
 @router.get("", response_model=FindUserResult)
 @inject
 async def get_user_list(
-  find_query: FindUserAuth = Depends(),
+  find_query: FindAuthByIdentifier = Depends(),
   service: UserService = Depends(Provide[Container.user_service]),
   current_user: User = Depends(get_current_super_user),
 ):
